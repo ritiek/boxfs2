@@ -225,8 +225,13 @@ int main(int argc, char *argv[])
     int fuse_res;
 
     if(api_init(&argc, &argv)) return 1;
-    fuse_res = fuse_main(argc, argv, &box_oper, NULL);
+
+    struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
+
+    fuse_opt_parse(&args, NULL, NULL, NULL);
+    fuse_opt_add_arg(&args, "-oallow_other");
+    fuse_res = fuse_main(args.argc, args.argv, &box_oper, NULL);
     api_free(argc, argv);
-     
-    return fuse_res;   
+
+    return fuse_res;
 }
